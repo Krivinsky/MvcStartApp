@@ -10,15 +10,17 @@ namespace CoreStartApp
     public class LoggingMidlleware
     {
         private readonly RequestDelegate _requestDelegate;
-        private IUserInfoRepository _repo; 
+        private IUserInfoRepository _repo;
+        private IRequestRepoImpl _repoImpl;
 
         /// <summary>
         ///  Middleware-компонент должен иметь конструктор, принимающий RequestDelegate
         /// </summary>
-        public LoggingMidlleware(RequestDelegate requestDelegate, IUserInfoRepository repo)
+        public LoggingMidlleware(RequestDelegate requestDelegate, IUserInfoRepository repo, IRequestRepoImpl repoImpl)
         {
             _requestDelegate = requestDelegate;
-            _repo = repo; 
+            _repo = repo;
+            _repoImpl = repoImpl;
         }
 
         /// <summary>
@@ -58,6 +60,11 @@ namespace CoreStartApp
             string logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Logs", "Requests.txt");
 
             await File.AppendAllTextAsync(logFilePath, logMessage);
+        }
+
+        public async void LogToDb(HttpContext context)
+        {
+            await 
         }
     }
 }

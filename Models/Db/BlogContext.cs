@@ -23,6 +23,7 @@ namespace MvcStartApp.Models.Db
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserInfo>().ToTable("UserInfos");
+            modelBuilder.Entity<Request>().ToTable("Requests");
         }
     }
 }

@@ -11,12 +11,12 @@ namespace CoreStartApp
     {
         private readonly RequestDelegate _requestDelegate;
         private IUserInfoRepository _repo;
-        private IRequestRepoImpl _repoImpl;
+        private IRequestRepository _repoImpl;
 
         /// <summary>
         ///  Middleware-компонент должен иметь конструктор, принимающий RequestDelegate
         /// </summary>
-        public LoggingMidlleware(RequestDelegate requestDelegate, IUserInfoRepository repo, IRequestRepoImpl repoImpl)
+        public LoggingMidlleware(RequestDelegate requestDelegate, IUserInfoRepository repo, IRequestRepository repoImpl)
         {
             _requestDelegate = requestDelegate;
             _repo = repo;
@@ -40,6 +40,7 @@ namespace CoreStartApp
             
             LogConsole(context);
             await LogFile(context);
+            LogToDb(context);
 
             // Передача запроса далее по конвейеру
             await _requestDelegate.Invoke(context);
@@ -64,7 +65,13 @@ namespace CoreStartApp
 
         public async void LogToDb(HttpContext context)
         {
-            await 
+            Request request = new Request()
+            {
+                Id = Guid.NewGuid(),
+                Date = DateTime.Now,
+                Url = $"http://{context.Request.Host.Value}"
+            };
+            await _repoImpl.AddRequest(request);
         }
     }
 }

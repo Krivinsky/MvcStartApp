@@ -4,21 +4,19 @@ using System.Threading.Tasks;
 
 namespace MvcStartApp.Models.Db
 {
-    public class IRequestRepoImpl : IRequestRepository
+    public class RequestRepoImpl : IRequestRepository
     {
         private readonly BlogContext _blogContext;
 
-        public IRequestRepoImpl(BlogContext blogContext)
+        public RequestRepoImpl(BlogContext blogContext)
         {
             _blogContext = blogContext;
         }
 
         public async Task AddRequest(Request request)
         {
-            request.Date = DateTime.Now;
-            request.Id = Guid.NewGuid();
-
-            // Добавление пользователя
+            
+            // Добавление запроса в БД
             var entry = _blogContext.Entry(request);
             if (entry.State == EntityState.Detached)
             {
